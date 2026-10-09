@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaiba & Asif - Royal Wedding Invitation</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #071022; /* Deep Royal Night Blue */
+            color: #f2ede4; 
+            overflow-x: hidden;
+            /* Starry subtle background */
+            background-image: radial-gradient(rgba(212, 175, 55, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Gold Text Utility */
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* ---------------- ENVELOPE SECTION ---------------- */
+        #envelope-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #071022; display: flex; justify-content: center; align-items: center;
+            z-index: 100; transition: transform 1.2s cubic-bezier(0.64, 0, 0.78, 0), opacity 1.2s ease-in-out;
+        }
+        .envelope {
+            position: relative; width: 340px; height: 230px; background: #fff;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); border-radius: 5px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 170px solid transparent; border-right: 170px solid transparent;
+            border-top: 140px solid #f2ede4; transform-origin: top;
+            transition: transform 0.8s ease-in-out; z-index: 4;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+        .envelope-body {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 170px solid #f9f8f6; border-right: 170px solid #f9f8f6;
+            border-bottom: 120px solid #ffffff; z-index: 3;
+        }
+        .wax-seal {
+            position: absolute; top: 120px; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; 
+            background: radial-gradient(circle, #fcf6ba, #b38728, #aa771c);
+            border-radius: 50%; z-index: 5; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.6);
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            font-family: 'Cinzel', serif; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .wax-seal span { font-size: 20px; font-family: 'Great Vibes', cursive;}
+        .wax-seal small { font-size: 8px; letter-spacing: 1px; margin-top: 2px;}
+        .wax-seal:hover { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 0 20px rgba(212,175,55,0.6); }
+        .envelope.open .flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope.open .wax-seal { opacity: 0; visibility: hidden; }
+
+        /* ---------------- MAGICAL BACKGROUND PARTICLES ---------------- */
+        #particles-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: -2; overflow: hidden;
+        }
+        .magic-dust {
+            position: absolute;
+            background: radial-gradient(circle, #fcf6ba, #d4af37, transparent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp 8s infinite linear;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            50% { transform: translateY(50vh) scale(1); opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+        }
+        .twinkle-star {
+            position: absolute; background: #fff; border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); box-shadow: 0 0 2px #fcf6ba; }
+            100% { opacity: 0.8; transform: scale(1.2); box-shadow: 0 0 8px #fcf6ba, 0 0 15px #fff; }
+        }
+
+        /* ---------------- MAIN CONTENT & ANIMATIONS ---------------- */
+        #main-content {
+            display: none; opacity: 0; animation: fadeInPage 2s forwards; padding-bottom: 80px; position: relative; z-index: 1;
+        }
+        @keyframes fadeInPage { to { opacity: 1; } }
+        section { padding: 60px 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Hanging Lanterns */
+        .lantern-container { position: absolute; top: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: -1; pointer-events: none;}
+        .lantern { width: 40px; transform-origin: top center; animation: swing 4s ease-in-out infinite alternate; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
+        .lantern:nth-child(2) { animation-delay: 1s; animation-duration: 5s; }
+        @keyframes swing { 0% { transform: rotate(8deg); } 100% { transform: rotate(-8deg); } }
+
+        /* ---------------- HERO SECTION (MEHRAB ARCH) ---------------- */
+        .hero-section { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; margin-top: 40px; }
+        .mehrab-arch {
+            border: 2px solid #b38728;
+            border-top-left-radius: 50% 120px;
+            border-top-right-radius: 50% 120px;
+            padding: 70px 30px;
+            background: linear-gradient(180deg, rgba(11,29,58,0) 0%, rgba(11,29,58,0.5) 100%);
+            box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.15);
+            position: relative;
+            backdrop-filter: blur(2px);
+        }
+        .bismillah { font-family: 'Amiri', serif; font-size: 42px; margin-bottom: 25px; }
+        .welcome-text { font-size: 13px; text-transform: uppercase; letter-spacing: 4px; color: #a9b0c0; margin-bottom: 30px; }
+        .names-main { font-family: 'Great Vibes', cursive; font-size: 75px; line-height: 1.1; margin: 15px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .names-ampersand { font-family: 'Cinzel', serif; font-size: 35px; color: #b38728; margin: 5px 0; }
+        .gold-divider { font-size: 20px; color: #b38728; letter-spacing: 15px; margin: 40px 0; opacity: 0.7; }
+
+        /* ---------------- PARALLAX QUOTE SECTION ---------------- */
+        .quote-section {
+            background-image: linear-gradient(rgba(7, 16, 34, 0.8), rgba(7, 16, 34, 0.9)), url('photo1.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            padding: 100px 20px; border-top: 2px solid #b38728; border-bottom: 2px solid #b38728;
+            position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.8); margin: 60px auto; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+        .arabic-quote { font-family: 'Amiri', serif; font-size: 32px; margin-bottom: 25px; line-height: 1.6; text-align: center; width: 100%; }
+        .english-quote { font-family: 'Montserrat', sans-serif; font-style: italic; font-size: 16px; line-height: 1.9; max-width: 650px; margin: 0 auto; color: #d1d5db; text-align: center; }
+        .surah-ref { display: block; margin-top: 20px; font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 2px; text-align: center; }
+
+        /* ---------------- GLASSMORPHISM CARDS ---------------- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 50px 30px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative; overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; pointer-events: none;
+        }
+        .couple-wrapper { display: flex; flex-direction: column; gap: 40px; }
+        .person-role { font-family: 'Cinzel', serif; font-size: 15px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; color: #a9b0c0;}
+        .person-name { font-family: 'Great Vibes', cursive; font-size: 50px; margin-bottom: 15px; }
+        .parents-name { font-size: 14px; color: #a9b0c0; line-height: 1.8; }
+
+        /* Itinerary */
+        .event-title { font-family: 'Cinzel', serif; font-size: 30px; margin-bottom: 30px; }
+        .event-info { margin-bottom: 20px; font-size: 16px; line-height: 1.8; color: #d1d5db; }
+        .highlight-venue { font-size: 20px; color: #fcf6ba; font-family: 'Cinzel', serif; display: block; margin: 10px 0;}
+
+        /* Countdown */
+        .countdown { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 30px; }
+        .time-box { 
+            background: rgba(11, 29, 58, 0.7); padding: 20px; border-radius: 12px; 
+            min-width: 90px; border: 1px solid rgba(212, 175, 55, 0.4); 
+            box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+        .time-box span { display: block; font-family: 'Cinzel', serif; font-size: 35px; font-weight: 600; color: #fcf6ba; }
+        .time-box small { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #a9b0c0; margin-top: 5px; display: block; }
+
+        /* Footer */
+        .footer-section { padding: 80px 20px 40px; margin-top: 40px; border-top: 1px solid rgba(212, 175, 55, 0.2); }
+        .footer-text { font-family: 'Great Vibes', cursive; font-size: 40px; margin-bottom: 15px; }
+        .footer-sub { font-size: 13px; color: #a9b0c0; letter-spacing: 1px; text-transform: uppercase;}
+
+        @media (max-width: 768px) {
+            .names-main { font-size: 55px; }
+            .mehrab-arch { padding: 50px 20px; }
+            .time-box { min-width: 75px; padding: 15px; }
+            .time-box span { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MAGICAL BACKGROUND -->
+    <div id="particles-container"></div>
+
+    <!-- ENVELOPE ENTRANCE -->
+    <div id="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="wax-seal" onclick="openEnvelope()">
+                <span>Z & A</span>
+                <small>TAP TO OPEN</small>
+            </div>
+            <div class="envelope-body"></div>
+        </div>
+    </div>
+
+    <!-- MAIN INVITATION -->
+    <div id="main-content">
+        
+        <!-- Lanterns -->
+        <div class="lantern-container">
+            <svg class="lantern" viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.5 0V10M7 10L16 10L18 25L5 25L7 10ZM12 25V35M9 35L14 35" stroke="#d4af37" stroke-width="2"/>
+                <circle cx="11.5" cy="18" r="3" fill="#fcf6ba" filter="blur(2px)"/>
+            </svg>
+            <svg class="lantern" viewBox="0 0 24 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.5 0V10M7 10L16 10L18 25L5 25L7 10ZM12 25V35M9 35L14 35" stroke="#d4af37" stroke-width="2"/>
+                <circle cx="11.5" cy="18" r="3" fill="#fcf6ba" filter="blur(2px)"/>
+            </svg>
+        </div>
+
+        <!-- HERO SECTION -->
+        <section class="hero-section reveal">
+            <div class="mehrab-arch">
+                <div class="bismillah gold-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+                <div class="welcome-text">We warmly welcome you to celebrate our special occasion</div>
+                <div class="names-main gold-text">Zaiba</div>
+                <div class="names-ampersand">✦</div>
+                <div class="names-main gold-text">Asif</div>
+                <div class="gold-divider">✦ ✧ ✦</div>
+                <div class="welcome-text" style="margin-bottom: 0;">24th December 2026</div>
+            </div>
+        </section>
+
+        <!-- QURANIC QUOTE (Parallax) -->
+        <section class="quote-section reveal">
+            <div class="arabic-quote gold-text">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</div>
+            <div class="english-quote">
+                "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."
+            </div>
+            <span class="surah-ref gold-text">- Surah Ar-Rum (30:21) -</span>
+        </section>
+
+        <!-- THE COUPLE -->
+        <section class="reveal">
+            <div class="welcome-text">The Bride & Groom</div>
+            <div class="couple-wrapper">
+                <div class="glass-card">
+                    <div class="person-role">The Bride</div>
+                    <div class="person-name gold-text">Zaiba Siddiqui</div>
+                    <div class="parents-name">Beloved Daughter of<br>Mr. Nafees Ahmad<br>Najibabad, Uttar Pradesh</div>
+                </div>
+                <div class="glass-card">
+                    <div class="person-role">The Groom</div>
+                    <div class="person-name gold-text">Asif Siddiqui</div>
+                    <div class="parents-name">Beloved Son of<br>Mr. Abdul Siddiqui<br>Jaipur, Rajasthan</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="gold-divider" style="text-align: center;">✦ ✧ ✦</div>
+
+        <!-- EVENT ITINERARY -->
+        <section class="reveal">
+            <div class="welcome-text">Event Details</div>
+            <div class="glass-card">
+                <div class="event-title gold-text">Nikah </div>
+                <div class="event-info">
+                    <strong>Date:</strong> 24th December 2026<br>
+                    <strong>Time:</strong> Night Function<br>
+                    <strong>Dinner:</strong> 6:30 PM Onwards
+                </div>
+                <div class="gold-divider" style="margin: 20px 0; font-size: 14px;">✧</div>
+                <div class="event-info" style="margin-bottom: 0;">
+                    <span style="letter-spacing: 2px; text-transform: uppercase; font-size: 12px; color: #a9b0c0;">Venue</span>
+                    <span class="highlight-venue">Bharat Banquet Hall</span>
+                    Najibabad, Bijnor, Uttar Pradesh
+                </div>
+            </div>
+        </section>
+
+        <!-- COUNTDOWN -->
+        <section class="reveal">
+            <div class="welcome-text">The Celebration Begins In</div>
+            <div class="countdown" id="countdown-timer">
+                <div class="time-box"><span id="days">00</span><small>Days</small></div>
+                <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+                <div class="time-box"><span id="minutes">00</span><small>Mins</small></div>
+                <div class="time-box"><span id="seconds">00</span><small>Secs</small></div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <section class="footer-section reveal">
+            <div class="footer-text gold-text">Awaiting Your Presence</div>
+            <div class="footer-sub">With profound joy from the Siddiqui & Ahmad families.</div>
+        </section>
+
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Generate Magical Background
+        function createMagicBackground() {
+            const container = document.getElementById('particles-container');
+            // Create Floating Dust
+            for(let i = 0; i < 35; i++) {
+                let dust = document.createElement('div');
+                dust.className = 'magic-dust';
+                dust.style.left = Math.random() * 100 + 'vw';
+                dust.style.width = (Math.random() * 4 + 2) + 'px';
+                dust.style.height = dust.style.width;
+                dust.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                dust.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(dust);
+            }
+            // Create Twinkling Stars
+            for(let i = 0; i < 25; i++) {
+                let star = document.createElement('div');
+                star.className = 'twinkle-star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.width = (Math.random() * 2 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.animationDelay = (Math.random() * 3) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // Envelope Animation
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const container = document.getElementById('envelope-container');
+            const mainContent = document.getElementById('main-content');
+            
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                container.style.transform = 'translateY(-100vh) scale(1.1)';
+                container.style.opacity = '0';
+                
+                setTimeout(() => {
+                    container.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    createMagicBackground(); // Start magic background
+                    revealElements(); 
+                }, 1000);
+            }, 900);
+        }
+
+        // Scroll Reveal
+        function revealElements() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", revealElements);
+
+        // Perfect Countdown Timer 
+        const countDownDate = new Date("2026-12-24T18:30:00").getTime();
+        setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            
+            if (distance > 0) {
+                document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("seconds").innerHTML = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
